@@ -8,7 +8,9 @@ lazy val root = project
 
     scalaVersion := scala3Version,
 
-    libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
+    libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test,
+    libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
+    libraryDependencies += "com.monovore" %% "decline" % "1.0.0"
   )
 
 //
