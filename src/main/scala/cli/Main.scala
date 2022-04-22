@@ -1,7 +1,9 @@
 package cli
 
 import scala.language.implicitConversions
-import com.monovore.decline._
+import com.monovore.decline.*
+import cats.implicits.*
+import cli.AnalysisMode.{SingleLog, SingleLogAndProcessModel, TwoLogs, TwoLogsAndProcessModel}
 
 import java.io.FileNotFoundException
 import java.nio.file.Path
@@ -11,85 +13,54 @@ import java.nio.file.Path
  */
 object Main
   extends CommandApp(
-    name = "redo-log-extractor",
-    header = "Extract Event logs from redo logs",
+    name = "sustainability-analysis-tool",
+    header = "Analyse cost-driver enriched event logs and processes",
     main = {
 
-      val filePath = Opts.argument[Path](metavar = "file")
-
-
-      val singleRunOpt = Opts
-        .flag(
-          "singleRun",
-          help =
-            "Run only once and exit immediately after generating an event log."
-        )
-        .orFalse
+      val logFilePath = Opts.argument[Path](metavar = "log-file")
+      val costVariantConfigPath = Opts.argument[Path](metavar = "cost-variant-config")
+      val processModelPath = Opts.option[Path](
+        long = "processModel",
+        help = "Process Model of the first simulation run"
+      ).orNone
+      val secondLogFile = Opts.option[Path](
+        long = "second-log",
+        help = "Second log file after re-design"
+      ).orNone
+      val secondCostVariantConfig = Opts.option[Path](
+        long = "second-cost-variant-config",
+        help = "Second log file after re-design"
+      ).orNone
 
       (
-        filePath,
-        singleRunOpt
+        logFilePath,
+        costVariantConfigPath,
+        processModelPath,
+        secondLogFile,
+        secondCostVariantConfig,
         ).mapN {
         (
-          pathParam,
-          singleRun
+          logPathParam,
+          costPathParam,
+          modelPathParam,
+          secondLogPathParam,
+          secondCostPathParam
         ) =>
-          implicit val path: Path = pathParam
 
-          if (singleRun)
-            println(
-              "The program will only run once and exit after writing the log."
-            )
+          val mode: AnalysisMode = determineAnalysisMode(modelPathParam, secondLogPathParam , secondCostPathParam)
 
-          printPath()
-          // todo: make block separator a parameter
-          // todo: make date time format a parameter
+          mode match
+            case _: SingleLog => ???
+            case _: SingleLogAndProcessModel => ???
+            case _: TwoLogs => ???
+            case _: TwoLogsAndProcessModel => ???
 
-          println("Reading and parsing redo log...")
-          var logEntries: Seq[parser.ExtractedLogEntry] = null
-          try {
-            logEntries = FileParser.getAndParseLogFile(path)
-          } catch {
-            case _: FileNotFoundException =>
-              println(
-                "The file you provided could not be found. Please ensure that the path to the redo log is correct, and that the log exists."
-              )
-              System.exit(1)
 
-          }
-          printEntries(logEntries)
-          val parsedLogEntries = FileParser.parseLogEntries(logEntries)
-          printParsedLogEntries(parsedLogEntries)
-          val transformedLogEntries =
-            EventExtractor.transformRowIdentifiers(parsedLogEntries)
-          printTransformedLogEntries(transformedLogEntries)
+          println(mode.toString)
 
-          println("Done.\nExtracting database schema...")
+          val resultPath = "somePath"
+          println(s"Done.\nThe event log is stored in $resultPath ")
 
-          val databaseSchema =
-            SchemaExtractor.extractDatabaseSchema(transformedLogEntries)
-
-          println("Done.")
-
-          printDatabaseSchema(databaseSchema)
-
-          while (!singleRun) {
-            val resultPath =
-              path.toString + s"_${rootClass.tableID}_result.xes"
-
-            TraceIDParser.serializeLogToDisk(
-              log,
-              resultPath
-            )
-
-            println(s"Done.\nThe event log is stored in $resultPath ")
-
-            if (!singleRun) {
-              println(
-                "You can enter another root class and generate another event log, or quit execution using Ctrl+C."
-              )
-            }
-          }
       }
     }
   )
