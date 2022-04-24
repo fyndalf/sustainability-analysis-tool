@@ -1,0 +1,5 @@
+package cost
+
+object CostCalculator {
+
+}

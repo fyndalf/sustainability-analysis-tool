@@ -1,5 +1,7 @@
 package cli
 
+import Executor.analyseSingleLog
+
 import scala.language.implicitConversions
 import com.monovore.decline.*
 import cats.implicits.*
@@ -49,14 +51,13 @@ object Main
 
           val mode: AnalysisMode = determineAnalysisMode(modelPathParam, secondLogPathParam , secondCostPathParam)
 
+          println(mode.toString)
+
           mode match
-            case _: SingleLog => ???
+            case _: SingleLog => analyseSingleLog(logPathParam, costPathParam)
             case _: SingleLogAndProcessModel => ???
             case _: TwoLogs => ???
             case _: TwoLogsAndProcessModel => ???
-
-
-          println(mode.toString)
 
           val resultPath = "somePath"
           println(s"Done.\nThe event log is stored in $resultPath ")

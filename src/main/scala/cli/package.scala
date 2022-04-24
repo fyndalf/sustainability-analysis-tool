@@ -6,10 +6,14 @@ import java.nio.file.Path
 package object cli {
 
   sealed abstract class AnalysisMode()
+
   object AnalysisMode {
     final case class SingleLog() extends AnalysisMode()
+
     final case class SingleLogAndProcessModel() extends AnalysisMode()
+
     final case class TwoLogs() extends AnalysisMode()
+
     final case class TwoLogsAndProcessModel() extends AnalysisMode()
   }
 
