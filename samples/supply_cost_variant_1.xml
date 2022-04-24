@@ -14,6 +14,6 @@
         <driver id="Production" cost="2"/>
         <driver id="Transportation" cost="1" />
     </variant>
-    <fixed_cost id="Determine Demand" cost ="2" />
+    <fixed_cost id="Calculate Demand" cost ="2" />
 </costVariantConfig>
 
