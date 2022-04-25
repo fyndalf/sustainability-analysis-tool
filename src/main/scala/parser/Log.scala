@@ -6,9 +6,9 @@ import parser.VariantConfig
 import java.nio.file.Path
 import scala.xml.XML
 
-object Log {
+object Log:
 
-  def parseLog(path: Path, variantConfig: CostVariantConfig): ParsedLog = {
+  def parseLog(path: Path, variantConfig: CostVariantConfig): ParsedLog =
     val logXML = XML.loadFile(path.toFile)
 
     var traceProfiles = Seq[TraceProfile]()
@@ -47,6 +47,4 @@ object Log {
       }
     })
     ParsedLog(activities, traceProfiles.toList)
-  }
 
-}
