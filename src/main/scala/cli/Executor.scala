@@ -3,6 +3,7 @@ package cli
 import cost.CostCalculator.{calculateCostDifferences, calculateProcessCost}
 import cost.{printProcessCost, printProcessCostDifference}
 import parser.Log.parseLog
+import parser.Model.highlightCostInModel
 import parser.VariantConfig
 import parser.VariantConfig.parseCostVariantConfig
 
@@ -34,3 +35,15 @@ object Executor:
 
     // todo: print diff between two costs here
     printProcessCostDifference(costDifference)
+
+  def analyseSingleLogAndProcessModel(
+      logPath: Path,
+      costConfigPath: Path,
+      modelPath: Path
+  ): Unit =
+    val config = parseCostVariantConfig(costConfigPath)
+    val log = parseLog(logPath, config)
+    val processCost = calculateProcessCost(log)
+    printProcessCost(processCost)
+
+    highlightCostInModel(processCost, modelPath)

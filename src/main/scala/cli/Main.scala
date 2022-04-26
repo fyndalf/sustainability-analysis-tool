@@ -7,7 +7,11 @@ import cli.AnalysisMode.{
   TwoLogs,
   TwoLogsAndProcessModel
 }
-import cli.Executor.{analyseSingleLog, analyseTwoLogs}
+import cli.Executor.{
+  analyseSingleLog,
+  analyseSingleLogAndProcessModel,
+  analyseTwoLogs
+}
 import com.monovore.decline.*
 
 import java.io.FileNotFoundException
@@ -71,7 +75,12 @@ object Main
 
             mode match
               case _: SingleLog => analyseSingleLog(logPathParam, costPathParam)
-              case _: SingleLogAndProcessModel => ???
+              case _: SingleLogAndProcessModel =>
+                analyseSingleLogAndProcessModel(
+                  logPathParam,
+                  costPathParam,
+                  modelPathParam.get
+                )
               case _: TwoLogs =>
                 analyseTwoLogs(
                   logPathParam,
