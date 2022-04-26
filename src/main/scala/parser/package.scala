@@ -34,20 +34,17 @@ package object parser:
       activity: ActivityIdentifier,
       processCost: ProcessCost
   ): Color =
-
     val activityCost = processCost.averageActivityCost(activity)
-
     if activityCost == 0.0 then return Color.white
-
     val averageCost =
       processCost.averageActivityCost.values.sum / processCost.averageActivityCost.values.size
 
     val colour = if activityCost < averageCost then Color.green else Color.red
-    val difference = percentageDifference(activityCost, averageCost)
+    val differenceToAverage = percentageDifference(activityCost, averageCost)
 
-    if difference > 100.0 && colour == Color.red then colour.darker()
-    else if difference > 100 then colour.brighter()
-    else if difference > 50.0 then colour
+    if differenceToAverage > 100.0 && colour == Color.red then colour.darker()
+    else if differenceToAverage > 100 then colour.brighter()
+    else if differenceToAverage > 50.0 then colour
     else if colour == Color.green then colour.darker()
     else colour.brighter()
 

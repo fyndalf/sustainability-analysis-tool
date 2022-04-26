@@ -25,7 +25,7 @@ object CostCalculator:
   def calculateCostDifferences(
       costBefore: ProcessCost,
       costAfter: ProcessCost,
-      isRelativeCalculation: Boolean = true
+      isRelativeCalculation: Boolean
   ): ProcessCostDifference =
 
     val traceCostBefore = costBefore.averageTraceCost

@@ -69,7 +69,9 @@ package object cost:
     println(s"Average Trace Cost: ${cost.averageTraceCost}")
     println("Activity Costs:")
     cost.averageActivityCost
-      .foreach(a => println(s"    ${a._1.id} - ${a._2}"))
+      .foreach(activityCost =>
+        println(s"    ${activityCost._1.id} - ${activityCost._2}")
+      )
 
   def printProcessCostDifference(costDifference: ProcessCostDifference): Unit =
     val mode =
@@ -78,7 +80,10 @@ package object cost:
     println(s"Trace Cost Difference: ${costDifference.traceCostDifference}")
     println("Activity Cost Differences:")
     costDifference.activityCostDifference
-      .foreach(a => println(s"    ${a._1.id} - ${a._2}"))
+      .foreach(activityCost =>
+        println(s"    ${activityCost._1.id} - ${activityCost._2}")
+      )
+    println("\n")
 
   private def calculateCostDifference(
       costBefore: Double,

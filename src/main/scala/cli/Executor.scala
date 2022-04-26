@@ -31,7 +31,11 @@ object Executor:
     val secondLog = parseLog(secondLogPath, secondConfig)
     val secondCost = calculateProcessCost(secondLog)
 
-    val costDifference = calculateCostDifferences(firstCost, secondCost)
+    val costDifference = calculateCostDifferences(
+      firstCost,
+      secondCost,
+      isRelativeCalculation = true
+    )
 
     printProcessCost(firstCost)
     printProcessCost(secondCost)

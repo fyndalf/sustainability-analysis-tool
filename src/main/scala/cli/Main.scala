@@ -71,7 +71,9 @@ object Main
 
             println(mode.toString)
 
-            // todo: store in some file?
+            // todo: comment everything
+
+            // todo: parameter for relative analysis vs absolute
 
             mode match
               case _: SingleLog => analyseSingleLog(logPathParam, costPathParam)

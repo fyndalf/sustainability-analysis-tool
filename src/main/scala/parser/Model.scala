@@ -19,7 +19,6 @@ object Model:
   def loadModelFromDisk(path: Path): Elem =
     XML.loadFile(path.toFile)
 
-  // todo: make this return the file?
   def highlightCostInModel(cost: ProcessCost, modelPath: Path): Unit =
     val model = loadModelFromDisk(modelPath)
 
@@ -65,8 +64,11 @@ object Model:
         else in
     yield out
 
-    // todo: make this configurable
-    val variable_name = new PrintWriter("./samples/out.bpmn")
+    val pathToFile = modelPath.getParent.toString
+    val filename =
+      s"${modelPath.getFileName.toString.split(".bpmn")(0)}_highlighted.bpmn"
+
+    val variable_name = new PrintWriter(s"$pathToFile/$filename")
     variable_name.write(processedModel.toArray)
     variable_name.close()
     source.close()
