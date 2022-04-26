@@ -79,3 +79,20 @@ package object cost:
     println("Activity Cost Differences:")
     costDifference.activityCostDifference
       .foreach(a => println(s"    ${a._1.id} - ${a._2}"))
+
+  private def calculateCostDifference(
+      costBefore: Double,
+      costAfter: Double,
+      isRelativeCalculation: Boolean
+  ): Double =
+    if isRelativeCalculation then
+      calculatePercentageIncrease(costBefore, costAfter)
+    else costAfter - costBefore
+
+  private def calculatePercentageIncrease(
+      costBefore: Double,
+      costAfter: Double
+  ): Double =
+    // todo: how to handle NaN or Infinity scenarios here?
+    if costBefore == costAfter then return 0.0
+    ((costAfter - costBefore) / costBefore) * 100

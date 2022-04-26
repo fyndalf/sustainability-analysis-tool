@@ -17,24 +17,24 @@ object VariantConfig:
     var costMap = new HashMap[ActivityIdentifier, Double]()
 
     variantXML.child
-      .foreach(c =>
-        if c.label == "variant" then
-          val costDrivers: Seq[ConcreteCostDriver] = c.child
+      .foreach(variantNode =>
+        if variantNode.label == "variant" then
+          val costDrivers: Seq[ConcreteCostDriver] = variantNode.child
             .filter(_.label == "driver")
-            .map(d =>
+            .map(driverNode =>
               ConcreteCostDriver(
-                d.attribute("id").get.text,
-                d.attribute("cost").get.text.toDouble
+                driverNode.attribute("id").get.text,
+                driverNode.attribute("cost").get.text.toDouble
               )
             )
           variants = variants :+ CostVariant(
-            c.attribute("id").get.text,
+            variantNode.attribute("id").get.text,
             costDrivers.toList
           )
-        if c.label == "fixed_cost" then
+        if variantNode.label == "fixed_cost" then
           costMap = costMap + (ActivityIdentifier(
-            c.attribute("id").get.text
-          ) -> c.attribute("cost").get.text.toDouble)
+            variantNode.attribute("id").get.text
+          ) -> variantNode.attribute("cost").get.text.toDouble)
       )
 
     CostVariantConfig(variants.toList, costMap)

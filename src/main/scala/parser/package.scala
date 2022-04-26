@@ -1,9 +1,6 @@
-import cost.{
-  ActivityIdentifier,
-  ActivityProfile,
-  ConcreteCostDriver,
-  TraceProfile
-}
+import cost.*
+
+import java.awt.Color
 
 package object parser:
   // for parsing
@@ -32,3 +29,34 @@ package object parser:
     val fixedCost =
       if fixedActivityCosts.contains(id) then fixedActivityCosts(id) else 0
     ActivityProfile(id, concreteCostDrivers, fixedCost)
+
+  private def determineActivityColour(
+      activity: ActivityIdentifier,
+      processCost: ProcessCost
+  ): Color =
+
+    val activityCost = processCost.averageActivityCost(activity)
+
+    if activityCost == 0.0 then return Color.white
+
+    val averageCost =
+      processCost.averageActivityCost.values.sum / processCost.averageActivityCost.values.size
+
+    val colour = if activityCost < averageCost then Color.green else Color.red
+    val difference = percentageDifference(activityCost, averageCost)
+
+    if difference > 100.0 && colour == Color.red then colour.darker()
+    else if difference > 100 then colour.brighter()
+    else if difference > 50.0 then colour
+    else if colour == Color.green then colour.darker()
+    else colour.brighter()
+
+  private def percentageDifference(
+      costA: Double,
+      costB: Double
+  ): Double =
+    if costA == costB then return 0.0
+    Math.abs(((costB - costA) / costA) * 100)
+
+  private def toHex(colour: Color): String =
+    s"#${Integer.toHexString(colour.getRGB).substring(2)}"

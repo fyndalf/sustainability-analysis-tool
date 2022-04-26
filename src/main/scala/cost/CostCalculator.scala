@@ -45,8 +45,10 @@ object CostCalculator:
       activityCostsBefore.keys.toList ++ activityCostsAfter.keys.toList
 
     combinedActivities.toSet.foreach(activity =>
-      val activityCostBefore = activityCostsBefore.getOrElse(activity, 0.0)
-      val activityCostAfter = activityCostsAfter.getOrElse(activity, 0.0)
+      val activityCostBefore: Double =
+        activityCostsBefore.getOrElse(activity, 0.0)
+      val activityCostAfter: Double =
+        activityCostsAfter.getOrElse(activity, 0.0)
       activityCostDifference =
         activityCostDifference + (activity -> calculateCostDifference(
           activityCostBefore,
@@ -60,20 +62,3 @@ object CostCalculator:
       activityCostDifference,
       isRelativeCalculation
     )
-
-  private def calculateCostDifference(
-      costBefore: Double,
-      costAfter: Double,
-      isRelativeCalculation: Boolean
-  ): Double =
-    if isRelativeCalculation then
-      calculatePercentageIncrease(costBefore, costAfter)
-    else costAfter - costBefore
-
-  private def calculatePercentageIncrease(
-      costBefore: Double,
-      costAfter: Double
-  ): Double =
-    // todo: how to handle NaN or Infinity scenarios here?
-    if costBefore == costAfter then return 0.0
-    ((costAfter - costBefore) / costBefore) * 100

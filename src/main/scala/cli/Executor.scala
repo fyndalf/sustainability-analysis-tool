@@ -33,7 +33,8 @@ object Executor:
 
     val costDifference = calculateCostDifferences(firstCost, secondCost)
 
-    // todo: print diff between two costs here
+    printProcessCost(firstCost)
+    printProcessCost(secondCost)
     printProcessCostDifference(costDifference)
 
   def analyseSingleLogAndProcessModel(
