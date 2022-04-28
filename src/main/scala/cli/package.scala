@@ -5,6 +5,8 @@ import java.nio.file.Path
 
 package object cli:
 
+  /** Encapsulates the analysis mode with which the analysis is conducted.
+    */
   sealed abstract class AnalysisMode()
 
   object AnalysisMode:
@@ -16,6 +18,11 @@ package object cli:
 
     final case class TwoLogsAndProcessModel() extends AnalysisMode()
 
+  /** Based on the supplied additional parameters, the mode of analysis is
+    * determined. Only the required log and config, or an additional process
+    * model, or an additional log and config, or an additional log and config
+    * and process model are the possible combinations of parameters.
+    */
   def determineAnalysisMode(
       modelParam: Option[Path],
       secondLogParam: Option[Path],

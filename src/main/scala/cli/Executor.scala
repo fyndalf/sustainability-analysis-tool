@@ -1,12 +1,8 @@
 package cli
 
+import cost.{ProcessCost, ProcessCostDifference}
 import cost.CostCalculator.{calculateCostDifferences, calculateProcessCost}
-import cost.{
-  printProcessCost,
-  printProcessCostDifference,
-  ProcessCost,
-  ProcessCostDifference
-}
+import cost.printer.{printProcessCost, printProcessCostDifference}
 import parser.Log.parseLog
 import parser.Model.{highlightCostDifferenceInModel, highlightCostInModel}
 import parser.VariantConfig
@@ -16,6 +12,8 @@ import java.nio.file.Path
 
 object Executor:
 
+  /** Analyses and prints the cost of a single log and config.
+    */
   def analyseSingleLog(logPath: Path, costConfigPath: Path): ProcessCost =
     val config = parseCostVariantConfig(costConfigPath)
     val log = parseLog(logPath, config)
@@ -23,6 +21,8 @@ object Executor:
     printProcessCost(processCost)
     processCost
 
+  /** Analyses, prints, and visualizes the cost of a single log and config.
+    */
   def analyseSingleLogAndProcessModel(
       logPath: Path,
       costConfigPath: Path,
@@ -31,6 +31,8 @@ object Executor:
     val processCost = analyseSingleLog(logPath, costConfigPath)
     highlightCostInModel(processCost, modelPath)
 
+  /** Analyses and prints the cost difference between two logs and configs
+    */
   def analyseTwoLogs(
       logPath: Path,
       costConfigPath: Path,
@@ -51,6 +53,9 @@ object Executor:
     printProcessCostDifference(costDifference)
     costDifference
 
+  /** Analyses, prints, and visualizes the cost difference between two logs and
+    * configs, using a process model.
+    */
   def analyseTwoLogsandProcessModel(
       logPath: Path,
       costConfigPath: Path,

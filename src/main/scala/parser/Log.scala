@@ -14,29 +14,42 @@ import scala.xml.XML
 
 object Log:
 
+  /**
+   * Parses a log file to extract its activity identifiers and trace profiles
+   */
   def parseLog(path: Path, variantConfig: CostVariantConfig): ParsedLog =
     val logXML = XML.loadFile(path.toFile)
 
     var traceProfiles = Seq[TraceProfile]()
     var activities = Set[ActivityIdentifier]()
 
+    // for each trace tag in xml
     logXML.child.foreach(traceNode =>
       if traceNode.label == "trace" then
 
-        var activityProfiles = Seq[ActivityProfile]()
+        // create activity profiles
+        var activityProfilesOfTrace = Seq[ActivityProfile]()
+
+        // get cost variant attribute
         val costVariantIdentifier = traceNode.child
-          .find(n =>
-            n.attribute("key")
-              .isDefined && n.attribute("key").get.text == "cost:variant"
+          .find(traceAttribute =>
+            traceAttribute.attribute("key")
+              .isDefined && traceAttribute.attribute("key").get.text == "cost:variant"
           )
           .get
           .attribute("value")
           .get
           .text
-        val currentCostVariant: CostVariant =
-          variantConfig.variants.find(_.id == costVariantIdentifier).get
+
+        // get cost variant from attribute
+        val costVariantOfTrace: CostVariant =
+          variantConfig.variants.find(_.id == costVariantIdentifier).get;
+
+        // for each event node, extract activity identifier and concrete cost drivers
         traceNode.child.foreach(eventNode =>
           if eventNode.label == "event" then
+
+            // get activity identifier
             val currentActivityIdentifier = eventNode.child
               .find(eventAttributeNode =>
                 eventAttributeNode
@@ -50,32 +63,41 @@ object Log:
               .attribute("value")
               .get
               .text
+
+            // store activity identifier for trace
             val currentActivity: ActivityIdentifier =
-              ActivityIdentifier(currentActivityIdentifier)
+              ActivityIdentifier(currentActivityIdentifier);
             activities = activities + currentActivity
+
+            // determine fixed cost based on cost variant
             val fixedCost =
               variantConfig.fixedActivityCosts.getOrElse(currentActivity, 0.0)
 
-            var concreteCostDrivers = Seq[ConcreteCostDriver]()
+            // extract concrete cost driver nodes and add respective drivers from cost variant config
+            var concreteCostDriversOfActivity = Seq[ConcreteCostDriver]();
             eventNode.child.foreach(eventAttribute =>
               if eventAttribute.attribute("key").isDefined && eventAttribute
                   .attribute("key")
                   .get
                   .text == "cost:driver"
               then
+                // extract and store cost driver from cost variant config
                 val costDriverIdentifier: String =
-                  eventAttribute.attribute("value").get.text
-                concreteCostDrivers =
-                  concreteCostDrivers :+ currentCostVariant.costDrivers
+                  eventAttribute.attribute("value").get.text;
+                concreteCostDriversOfActivity =
+                  concreteCostDriversOfActivity :+ costVariantOfTrace.costDrivers
                     .find(_.name == costDriverIdentifier)
                     .get
-            )
-            activityProfiles = activityProfiles :+ ActivityProfile(
+            );
+            // store activity profile for trace
+            activityProfilesOfTrace = activityProfilesOfTrace :+ ActivityProfile(
               currentActivity,
-              concreteCostDrivers.toList,
+              concreteCostDriversOfActivity.toList,
               fixedCost
-            )
-        )
-        traceProfiles = traceProfiles :+ TraceProfile(activityProfiles.toList)
+            );
+        );
+        // create trace profile for trace and its extracted activity profiles
+        traceProfiles = traceProfiles :+ TraceProfile(activityProfilesOfTrace.toList);
     )
+    
     ParsedLog(activities, traceProfiles.toList)

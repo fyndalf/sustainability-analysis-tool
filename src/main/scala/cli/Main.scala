@@ -19,7 +19,8 @@ import java.io.FileNotFoundException
 import java.nio.file.Path
 import scala.language.implicitConversions
 
-/** The main object of the CLI tool - it is used to run the tool.
+/** The main object of the CLI tool - it is used to run the tool. Based on the
+  * passed parameters, the analysis mode is determined.
   */
 object Main
     extends CommandApp(
@@ -44,7 +45,7 @@ object Main
           .orNone
         val secondCostVariantConfig = Opts
           .option[Path](
-            long = "second-cost-variant-config",
+            long = "second-config",
             help = "Second log file after re-design"
           )
           .orNone

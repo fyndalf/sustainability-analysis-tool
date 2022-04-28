@@ -11,20 +11,26 @@ import scala.xml.*
 
 object Model:
 
-  // determine colour difference based on: max difference between differences, or on percentual increase
-
   // for each activity: find <bpmn:task> and note id
   // find bpmnd:BPMNShape with id and set color:background-color to whatever is needed
 
+  /** Loads a model as XML from disk
+    */
   def loadModelFromDisk(path: Path): Elem =
     XML.loadFile(path.toFile)
 
+  /** Highlights process costs in a process model by setting
+    * "color:background-color" attributes for the respective "bpmnd:BPMNShape"s.
+    */
   def highlightCostInModel(cost: ProcessCost, modelPath: Path): Unit =
 
+    // extract pure activity names from process cost
     val activityNames = cost.averageActivityCost.keys.map(_.id).toList
+    // read model and extract mapping of task ids to activity identifiers
     val modelIDToActivityMap =
       extractModelActivityMapping(activityNames, modelPath)
 
+    // read process model linewise
     val source = io.Source.fromFile(modelPath.toFile)
     val sourceLines = source.getLines()
     val processedModel = for
@@ -34,6 +40,7 @@ object Model:
             "bpmnElement="
           ) && modelIDToActivityMap.keys.exists(in.contains)
         then
+          // determine colour based on activity cost
           val activityID = modelIDToActivityMap.keys.find(in.contains).get
           val color = toHex(
             determineActivityColourForCost(
@@ -41,6 +48,7 @@ object Model:
               cost
             )
           )
+          // append colour to last xml tag in line
           val colorString = s"color:background-color=\"$color\""
           s"${in.dropRight(1)} $colorString>"
         else in
@@ -54,11 +62,14 @@ object Model:
       modelPath: Path
   ): Unit =
 
+    // extract pure activity names from process cost
     val activityNames =
       costDifference.activityCostDifference.keys.map(_.id).toList
+    // read model and extract mapping of task ids to activity identifiers
     val modelIDToActivityMap =
       extractModelActivityMapping(activityNames, modelPath)
 
+    // read process model linewise
     val source = io.Source.fromFile(modelPath.toFile)
     val sourceLines = source.getLines()
     val processedModel = for
@@ -68,6 +79,7 @@ object Model:
             "bpmnElement="
           ) && modelIDToActivityMap.keys.exists(in.contains)
         then
+          // determine colour based on difference
           val activityID = modelIDToActivityMap.keys.find(in.contains).get
           val color = toHex(
             determineActivityColourForCostDifference(
@@ -75,6 +87,7 @@ object Model:
               costDifference
             )
           )
+          // append colour to last xml tag in line
           val colorString = s"color:background-color=\"$color\""
           s"${in.dropRight(1)} $colorString>"
         else in
@@ -83,6 +96,9 @@ object Model:
     saveNewProcessModel(modelPath, processedModel)
     source.close()
 
+  /** Reads a process model and determines the assignment of "bpmn:task" ids to
+    * activity identifiers
+    */
   private def extractModelActivityMapping(
       activityNames: List[String],
       modelPath: Path
@@ -94,20 +110,23 @@ object Model:
 
     model.child
       .filter(node => node.label == "process")
-      .foreach(node =>
-        node.child
-          .filter(task => task.label == "task")
-          .foreach(task =>
-            if task
+      .foreach(processNode =>
+        processNode.child
+          .filter(taskNode => taskNode.label == "task")
+          .foreach(taskNode =>
+            if taskNode
                 .attribute("id")
-                .isDefined && task.attribute("name").isDefined && activityNames
-                .contains(task.attribute("name").get.text)
+                .isDefined && taskNode
+                .attribute("name")
+                .isDefined && activityNames
+                .contains(taskNode.attribute("name").get.text)
             then
-              modelIDToActivityMap = modelIDToActivityMap + (task
+              // store task id and corresponding activity identifier
+              modelIDToActivityMap = modelIDToActivityMap + (taskNode
                 .attribute("id")
                 .get
                 .text -> ActivityIdentifier(
-                task.attribute("name").get.text
+                taskNode.attribute("name").get.text
               ))
           )
       )
