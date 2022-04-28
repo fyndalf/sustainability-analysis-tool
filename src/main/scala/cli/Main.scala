@@ -10,7 +10,8 @@ import cli.AnalysisMode.{
 import cli.Executor.{
   analyseSingleLog,
   analyseSingleLogAndProcessModel,
-  analyseTwoLogs
+  analyseTwoLogs,
+  analyseTwoLogsandProcessModel
 }
 import com.monovore.decline.*
 
@@ -48,19 +49,30 @@ object Main
           )
           .orNone
 
+        val relative =
+          Opts
+            .flag(
+              "relative",
+              help =
+                "Perform a relative comparison of process costs instead of absolute"
+            )
+            .orFalse
+
         (
           logFilePath,
           costVariantConfigPath,
           processModelPath,
           secondLogFile,
-          secondCostVariantConfig
+          secondCostVariantConfig,
+          relative
         ).mapN {
           (
               logPathParam,
               costPathParam,
               modelPathParam,
               secondLogPathParam,
-              secondCostPathParam
+              secondCostPathParam,
+              isComparisonRelative
           ) =>
 
             val mode: AnalysisMode = determineAnalysisMode(
@@ -88,9 +100,18 @@ object Main
                   logPathParam,
                   costPathParam,
                   secondLogPathParam.get,
-                  secondCostPathParam.get
+                  secondCostPathParam.get,
+                  isComparisonRelative
                 )
-              case _: TwoLogsAndProcessModel => ???
+              case _: TwoLogsAndProcessModel =>
+                analyseTwoLogsandProcessModel(
+                  logPathParam,
+                  costPathParam,
+                  secondLogPathParam.get,
+                  secondCostPathParam.get,
+                  modelPathParam.get,
+                  isComparisonRelative
+                )
 
         }
     )

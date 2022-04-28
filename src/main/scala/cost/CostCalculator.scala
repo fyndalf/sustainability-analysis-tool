@@ -28,6 +28,8 @@ object CostCalculator:
       isRelativeCalculation: Boolean
   ): ProcessCostDifference =
 
+    // todo: mapping of different activities before/after renaming should be taken into accont here!
+
     val traceCostBefore = costBefore.averageTraceCost
     val traceCostAfter = costAfter.averageTraceCost
     val traceCostDifference = calculateCostDifference(
