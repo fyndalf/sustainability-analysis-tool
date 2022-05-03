@@ -7,7 +7,7 @@ import java.nio.file.Path
 package object parser:
   // for parsing
 
-  /** A cost variant, constisting of an id and a set of concrete cost drivers,
+  /** A cost variant, consisting of an id and a set of concrete cost drivers,
     * which contain concrete costs
     */
   case class CostVariant(id: String, costDrivers: List[ConcreteCostDriver])
@@ -42,25 +42,56 @@ package object parser:
 
     determineColour(activityCost, averageCost)
 
+  /** Determines the colour for a cost difference either with respect to the
+    * average difference or with absolute terms
+    */
+  def determineColourForCostDifference(
+      activity: ActivityIdentifier,
+      processCostDifference: ProcessCostDifference,
+      isComparisonBasedOnAverage: Boolean
+  ): Color =
+    if isComparisonBasedOnAverage then
+      determineActivityColourForCostDifferenceFromAverageDifference(
+        activity,
+        processCostDifference
+      )
+    else
+      determineActivityColourForCostDifferenceFromActualDifference(
+        activity,
+        processCostDifference
+      )
+
   /** For a given activity and a process cost difference, determines the colour
     * based on difference to the average difference of all activities. This
     * indicates whether an activity has changed more or less than others.
     */
-  def determineActivityColourForCostDifference(
+  def determineActivityColourForCostDifferenceFromAverageDifference(
       activity: ActivityIdentifier,
       processCostDifference: ProcessCostDifference
   ): Color =
     val costDifference = processCostDifference.activityCostDifference(activity)
     if costDifference == 0.0 then return Color.white
-
+    // has activity changed more or less than average?
     val averageCostDifference =
       processCostDifference.activityCostDifference.values
         .filter(_.isFinite)
         .sum / processCostDifference.activityCostDifference.values.count(
         _.isFinite
       )
-
     determineColour(costDifference, averageCostDifference)
+
+  /** For a given activity and process cost difference, do the highlighting
+    * based on absolute differences
+    */
+  def determineActivityColourForCostDifferenceFromActualDifference(
+      activityIdentifier: ActivityIdentifier,
+      processCostDifference: ProcessCostDifference
+  ): Color =
+    val costDifference =
+      processCostDifference.activityCostDifference(activityIdentifier)
+    if costDifference == 0.0 then return Color.white
+
+    determineColour(costDifference, 0.0)
 
   /** Calculates the absolute percentage difference between two cost values
     */

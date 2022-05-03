@@ -59,7 +59,8 @@ object Model:
 
   def highlightCostDifferenceInModel(
       costDifference: ProcessCostDifference,
-      modelPath: Path
+      modelPath: Path,
+      isComparisonBasedOnAverage: Boolean
   ): Unit =
 
     // extract pure activity names from process cost
@@ -82,9 +83,10 @@ object Model:
           // determine colour based on difference
           val activityID = modelIDToActivityMap.keys.find(in.contains).get
           val color = toHex(
-            determineActivityColourForCostDifference(
+            determineColourForCostDifference(
               modelIDToActivityMap(activityID),
-              costDifference
+              costDifference,
+              isComparisonBasedOnAverage
             )
           )
           // append colour to last xml tag in line

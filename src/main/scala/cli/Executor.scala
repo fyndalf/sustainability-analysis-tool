@@ -62,7 +62,8 @@ object Executor:
       secondLogPath: Path,
       secondCostConfigPath: Path,
       modelPath: Path,
-      isComparisonRelative: Boolean
+      isComparisonRelative: Boolean,
+      isComparisonBasedOnAverage: Boolean
   ): Unit =
     val processCostDifference = analyseTwoLogs(
       logPath,
@@ -71,4 +72,8 @@ object Executor:
       secondCostConfigPath,
       isComparisonRelative
     )
-    highlightCostDifferenceInModel(processCostDifference, modelPath)
+    highlightCostDifferenceInModel(
+      processCostDifference,
+      modelPath,
+      isComparisonBasedOnAverage
+    )

@@ -99,20 +99,21 @@ package object cost:
 
   object printer:
     def printProcessCost(cost: ProcessCost): Unit =
-      println("##### Process Cost #####\n")
+      println("\n##### Process Cost #####\n")
       println(s"Average Trace Cost: ${cost.averageTraceCost}")
       println("Activity Costs:")
       cost.averageActivityCost
         .foreach(activityCost =>
           println(s"    ${activityCost._1.id} - ${activityCost._2}")
         )
+      println("\n")
 
     def printProcessCostDifference(
         costDifference: ProcessCostDifference
     ): Unit =
       val mode =
         if costDifference.isDifferenceRelative then "Relative" else "Absolute"
-      println(s"##### $mode Process Cost Difference #####\n")
+      println(s"\n##### $mode Process Cost Difference #####\n")
       println(s"Trace Cost Difference: ${costDifference.traceCostDifference}")
       println("Activity Cost Differences:")
       costDifference.activityCostDifference

@@ -33,7 +33,7 @@ object Main
           Opts.argument[Path](metavar = "cost-variant-config")
         val processModelPath = Opts
           .option[Path](
-            long = "processModel",
+            long = "process-model",
             help = "Process Model of the first simulation run"
           )
           .orNone
@@ -55,7 +55,16 @@ object Main
             .flag(
               "relative",
               help =
-                "Perform a relative comparison of process costs instead of absolute"
+                "Perform a relative comparison of process costs instead of absolute comparison."
+            )
+            .orFalse
+
+        val averageDifference =
+          Opts
+            .flag(
+              "average_difference",
+              help =
+                "Perform a difference analysis based on average differences. If not, it is done in relation to a difference of 0."
             )
             .orFalse
 
@@ -65,7 +74,8 @@ object Main
           processModelPath,
           secondLogFile,
           secondCostVariantConfig,
-          relative
+          relative,
+          averageDifference
         ).mapN {
           (
               logPathParam,
@@ -73,7 +83,8 @@ object Main
               modelPathParam,
               secondLogPathParam,
               secondCostPathParam,
-              isComparisonRelative
+              isComparisonRelative,
+              isComparisonBasedOnAverage
           ) =>
 
             val mode: AnalysisMode = determineAnalysisMode(
@@ -86,7 +97,7 @@ object Main
 
             // todo: comment everything
 
-            // todo: parameter for relative analysis vs absolute
+            // todo: compile to executeable
 
             mode match
               case _: SingleLog => analyseSingleLog(logPathParam, costPathParam)
@@ -111,7 +122,8 @@ object Main
                   secondLogPathParam.get,
                   secondCostPathParam.get,
                   modelPathParam.get,
-                  isComparisonRelative
+                  isComparisonRelative,
+                  isComparisonBasedOnAverage
                 )
 
         }
