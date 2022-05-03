@@ -1,0 +1,10 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="DeprecatedPackageObject" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="LegacyStringFormatting" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="MarkInnerCaseObjectsAsFinal" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PostfixMethodCall" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="VariablePatternShadow" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  </profile>
+</component>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <profile name="sbt 1" modules="sustainability-analysis-tool,sustainability-analysis-tool_8873" />
+    <profile name="sbt 2" modules="SustainabilityAnalysisTool">
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-explain" />
+        <parameter value="-explain-types" />
+        <parameter value="-new-syntax" />
+        <parameter value="-rewrite" />
+        <parameter value="-print-lines" />
+        <parameter value="-Ykind-projector" />
+        <parameter value="-Xfatal-warnings" />
+        <parameter value="-Xmigration" />
+      </parameters>
+    </profile>
+  </component>
+</project>
