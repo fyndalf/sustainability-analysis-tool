@@ -57,9 +57,9 @@ object CostCalculator:
     // and use 0.0 as cost before or after if an activity is not present in one of them
     combinedActivities.toSet.foreach(activity =>
       val activityCostBefore: Double =
-        activityCostsBefore.getOrElse(activity, 0.0)
+        activityCostsBefore.getOrElse(activity, 0.0);
       val activityCostAfter: Double =
-        activityCostsAfter.getOrElse(activity, 0.0)
+        activityCostsAfter.getOrElse(activity, 0.0);
       activityCostDifference =
         activityCostDifference + (activity -> calculateCostDifference(
           activityCostBefore,

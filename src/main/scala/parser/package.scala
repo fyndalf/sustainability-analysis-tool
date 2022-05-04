@@ -72,6 +72,8 @@ package object parser:
     val costDifference = processCostDifference.activityCostDifference(activity)
     if costDifference == 0.0 then return Color.white
     // has activity changed more or less than average?
+
+    // todo: what does average mean in this setting? Can it not just be trace cost / cost driver per trace?
     val averageCostDifference =
       processCostDifference.activityCostDifference.values
         .filter(_.isFinite)
