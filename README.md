@@ -1,5 +1,7 @@
 # sustainability-analysis-tool
 
+[![scalafmt](https://github.com/fyndalf/sustainability-analysis-tool/actions/workflows/scala-lint.yml/badge.svg)](https://github.com/fyndalf/sustainability-analysis-tool/actions/workflows/scala-lint.yml)
+
 ## Overview
 
 This is a CLI tool meant to be used in conjunction with the framework outlined in my Master's thesis (todo: link here).

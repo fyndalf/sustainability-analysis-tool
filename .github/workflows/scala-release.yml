@@ -36,6 +36,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/scala-3.1.2/redo-log-parser.jar
-          asset_name: redo-log-parser-${{ github.ref }}.jar
+          asset_path: ./target/scala-3.1.2/sustainability-analysis-tool.jar
+          asset_name: sustainability-analysis-tool-${{ github.ref_name }}.jar
           asset_content_type: application/jar
