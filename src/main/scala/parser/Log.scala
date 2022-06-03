@@ -14,9 +14,8 @@ import scala.xml.XML
 
 object Log:
 
-  /**
-   * Parses a log file to extract its activity identifiers and trace profiles
-   */
+  /** Parses a log file to extract its activity identifiers and trace profiles
+    */
   def parseLog(path: Path, variantConfig: CostVariantConfig): ParsedLog =
     val logXML = XML.loadFile(path.toFile)
 
@@ -33,8 +32,10 @@ object Log:
         // get cost variant attribute
         val costVariantIdentifier = traceNode.child
           .find(traceAttribute =>
-            traceAttribute.attribute("key")
-              .isDefined && traceAttribute.attribute("key").get.text == "cost:variant"
+            traceAttribute.attribute("key").isDefined && traceAttribute
+              .attribute("key")
+              .get
+              .text == "cost:variant"
           )
           .get
           .attribute("value")
@@ -76,28 +77,30 @@ object Log:
             // extract concrete cost driver nodes and add respective drivers from cost variant config
             var concreteCostDriversOfActivity = Seq[ConcreteCostDriver]();
             eventNode.child.foreach(eventAttribute =>
-              if eventAttribute.attribute("key").isDefined && eventAttribute
-                  .attribute("key")
-                  .get
-                  .text == "cost:driver"
+              val attributeText = eventAttribute.attribute("key")
+
+              if attributeText.isDefined && attributeText.get.text == "cost:driver"
               then
                 // extract and store cost driver from cost variant config
+                val attributeValue = eventAttribute.attribute("value")
                 val costDriverIdentifier: String =
-                  eventAttribute.attribute("value").get.text;
+                  attributeValue.get.text;
                 concreteCostDriversOfActivity =
                   concreteCostDriversOfActivity :+ costVariantOfTrace.costDrivers
                     .find(_.name == costDriverIdentifier)
                     .get
             );
             // store activity profile for trace
-            activityProfilesOfTrace = activityProfilesOfTrace :+ ActivityProfile(
-              currentActivity,
-              concreteCostDriversOfActivity.toList,
-              fixedCost
-            );
+            activityProfilesOfTrace =
+              activityProfilesOfTrace :+ ActivityProfile(
+                currentActivity,
+                concreteCostDriversOfActivity.toList,
+                fixedCost
+              );
         );
         // create trace profile for trace and its extracted activity profiles
-        traceProfiles = traceProfiles :+ TraceProfile(activityProfilesOfTrace.toList);
+        traceProfiles =
+          traceProfiles :+ TraceProfile(activityProfilesOfTrace.toList);
     )
-    
+
     ParsedLog(activities, traceProfiles.toList)
