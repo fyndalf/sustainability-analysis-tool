@@ -17,5 +17,6 @@ jobs:
           INSTALL_LOCATION=/var/tmp/scalafmt-native
           curl https://raw.githubusercontent.com/scalameta/scalafmt/master/bin/install-scalafmt-native.sh | \
             bash -s -- $VERSION $INSTALL_LOCATION
+          /var/tmp/scalafmt-native --help # should show version 3.5.8
       - name: Check for scalafmt conformance
         run: /var/tmp/scalafmt-native --list --non-interactive
