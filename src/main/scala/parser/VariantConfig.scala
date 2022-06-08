@@ -6,7 +6,6 @@ import java.nio.file.Path
 import scala.collection
 import scala.collection.Seq
 import scala.collection.immutable.HashMap
-import scala.language.postfixOps
 import scala.xml.XML
 
 object VariantConfig:

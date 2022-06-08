@@ -9,7 +9,6 @@ import cost.{
 import parser.VariantConfig
 
 import java.nio.file.Path
-import scala.language.postfixOps
 import scala.xml.XML
 
 object Log:

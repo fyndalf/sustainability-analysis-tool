@@ -6,7 +6,6 @@ import java.awt.Color
 import java.io.{File, PrintWriter}
 import java.nio.file.Path
 import scala.collection.immutable.HashMap
-import scala.language.postfixOps
 import scala.xml.*
 
 object Model:
