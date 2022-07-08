@@ -3,8 +3,6 @@ package cost
 import cost.calculation.{averageActivityCost, averageTraceProfileCost}
 import parser.ParsedLog
 
-import scala.language.postfixOps
-
 object CostCalculator:
 
   /** Calculate cost for a single parsed log
