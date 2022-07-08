@@ -2,11 +2,14 @@
 
 [![scalafmt](https://github.com/fyndalf/sustainability-analysis-tool/actions/workflows/scala-lint.yml/badge.svg)](https://github.com/fyndalf/sustainability-analysis-tool/actions/workflows/scala-lint.yml)
 
+Unless you're actually reviewing my thesis, it's probably not worthwhile checking out this code, but I hope you enjoy your stay here anyways!
+
 ## Overview
 
 This is a CLI tool meant to be used in conjunction with the framework outlined in my [Master's thesis](https://github.com/fyndalf/master-thesis).
 It is meant to analyse cost-driver enriched event logs, analyse them, and enhance related process models.
-Also, comparison between logs before and after process-redesign is supported.
+Also, comparison between logs before and after process-redesign is supported. 
+
 
 ## Usage and Installation
 
