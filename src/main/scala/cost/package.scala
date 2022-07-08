@@ -95,7 +95,9 @@ package object cost:
   ): Double =
     // todo: how to handle NaN or Infinity scenarios here?
     if costBefore == costAfter then return 0.0
-    ((costAfter - costBefore) / costBefore) * 100
+    BigDecimal(((costAfter - costBefore) / costBefore) * 100)
+      .setScale(2, BigDecimal.RoundingMode.DOWN)
+      .toDouble
 
   object printer:
     def printProcessCost(cost: ProcessCost): Unit =
