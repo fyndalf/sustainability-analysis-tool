@@ -4,7 +4,7 @@
 
 ## Overview
 
-This is a CLI tool meant to be used in conjunction with the framework outlined in my Master's thesis (todo: link here).
+This is a CLI tool meant to be used in conjunction with the framework outlined in my [Master's thesis](https://github.com/fyndalf/master-thesis).
 It is meant to analyse cost-driver enriched event logs, analyse them, and enhance related process models.
 Also, comparison between logs before and after process-redesign is supported.
 
