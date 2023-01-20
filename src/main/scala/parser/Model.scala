@@ -15,7 +15,7 @@ object Model:
 
   /** Loads a model as XML from disk
     */
-  def loadModelFromDisk(path: Path): Elem =
+  private def loadModelFromDisk(path: Path): Elem =
     XML.loadFile(path.toFile)
 
   /** Highlights process costs in a process model by setting

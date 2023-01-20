@@ -65,7 +65,7 @@ package object parser:
     * based on difference to the average difference of all activities. This
     * indicates whether an activity has changed more or less than others.
     */
-  def determineActivityColourForCostDifferenceFromAverageDifference(
+  private def determineActivityColourForCostDifferenceFromAverageDifference(
       activity: ActivityIdentifier,
       processCostDifference: ProcessCostDifference
   ): Color =
@@ -85,7 +85,7 @@ package object parser:
   /** For a given activity and process cost difference, do the highlighting
     * based on absolute differences
     */
-  def determineActivityColourForCostDifferenceFromActualDifference(
+  private def determineActivityColourForCostDifferenceFromActualDifference(
       activityIdentifier: ActivityIdentifier,
       processCostDifference: ProcessCostDifference
   ): Color =
@@ -127,7 +127,7 @@ package object parser:
 
   /** Generates a new filename for the augmented model.
     */
-  def newFilenameForModel(modelPath: Path): String =
+  private def newFilenameForModel(modelPath: Path): String =
     val pathToFile = modelPath.getParent.toString
     val filename =
       s"${modelPath.getFileName.toString.split(".bpmn")(0)}_highlighted.bpmn"

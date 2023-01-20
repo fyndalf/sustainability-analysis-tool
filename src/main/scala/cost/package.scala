@@ -32,13 +32,13 @@ package object cost:
   /** Contains cost calculation methods for the different types of profile costs
     */
   object calculation:
-    def activityProfileCost(activityProfile: ActivityProfile): Double =
+    private def activityProfileCost(activityProfile: ActivityProfile): Double =
       // sum of all concrete cost drivers and fixed costs
       activityProfile.concreteCostDriver
         .map(_.cost)
         .sum + activityProfile.fixedCost
 
-    def traceProfileCost(traceProfile: TraceProfile): Double =
+    private def traceProfileCost(traceProfile: TraceProfile): Double =
       // sum of all activity profile costs
       traceProfile.activityProfiles.map(activityProfileCost).sum
 
@@ -66,7 +66,7 @@ package object cost:
         traceProfiles.map(occurrence_count(activityIdentifier, _)).sum
       totalCost / totalOccurrence
 
-    def occurrence_count(
+    private def occurrence_count(
         activityIdentifier: ActivityIdentifier,
         traceProfile: TraceProfile
     ): Int =
@@ -89,7 +89,7 @@ package object cost:
 
   /** Calculate change of two cost values in terms of percentages
     */
-  def calculatePercentageIncrease(
+  private def calculatePercentageIncrease(
       costBefore: Double,
       costAfter: Double
   ): Double =
