@@ -11,7 +11,7 @@ import cli.Executor.{
   analyseSingleLog,
   analyseSingleLogAndProcessModel,
   analyseTwoLogs,
-  analyseTwoLogsandProcessModel
+  analyseTwoLogsAndProcessModel
 }
 import com.monovore.decline.*
 
@@ -97,7 +97,7 @@ object Main
 
             // todo: comment everything
 
-            // todo: compile to executeable
+            // todo: compile to executable
 
             mode match
               case _: SingleLog => analyseSingleLog(logPathParam, costPathParam)
@@ -116,7 +116,7 @@ object Main
                   isComparisonRelative
                 )
               case _: TwoLogsAndProcessModel =>
-                analyseTwoLogsandProcessModel(
+                analyseTwoLogsAndProcessModel(
                   logPathParam,
                   costPathParam,
                   secondLogPathParam.get,

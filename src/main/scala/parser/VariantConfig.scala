@@ -30,7 +30,7 @@ object VariantConfig:
                 driverNode.attribute("id").get.text,
                 driverNode.attribute("cost").get.text.toDouble
               )
-            );
+            )
           // store variant with drivers
           variants = variants :+ CostVariant(
             variantNode.attribute("id").get.text,

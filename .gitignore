@@ -21,3 +21,4 @@ build/
 *.iws
 .idea
 meta.json
+samples/*

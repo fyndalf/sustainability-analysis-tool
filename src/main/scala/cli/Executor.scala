@@ -56,7 +56,7 @@ object Executor:
   /** Analyses, prints, and visualizes the cost difference between two logs and
     * configs, using a process model.
     */
-  def analyseTwoLogsandProcessModel(
+  def analyseTwoLogsAndProcessModel(
       logPath: Path,
       costConfigPath: Path,
       secondLogPath: Path,

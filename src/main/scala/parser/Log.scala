@@ -74,7 +74,7 @@ object Log:
               variantConfig.fixedActivityCosts.getOrElse(currentActivity, 0.0)
 
             // extract concrete cost driver nodes and add respective drivers from cost variant config
-            var concreteCostDriversOfActivity = Seq[ConcreteCostDriver]();
+            var concreteCostDriversOfActivity = Seq[ConcreteCostDriver]()
             eventNode.child.foreach(eventAttribute =>
               val attributeText = eventAttribute.attribute("key")
 
@@ -88,7 +88,7 @@ object Log:
                   concreteCostDriversOfActivity :+ costVariantOfTrace.costDrivers
                     .find(_.name == costDriverIdentifier)
                     .get
-            );
+            )
             // store activity profile for trace
             activityProfilesOfTrace =
               activityProfilesOfTrace :+ ActivityProfile(
@@ -96,7 +96,7 @@ object Log:
                 concreteCostDriversOfActivity.toList,
                 fixedCost
               );
-        );
+        )
         // create trace profile for trace and its extracted activity profiles
         traceProfiles =
           traceProfiles :+ TraceProfile(activityProfilesOfTrace.toList);
