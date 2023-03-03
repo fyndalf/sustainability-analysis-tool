@@ -1,0 +1,28 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Sustainability Analysis Tool
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Finn Klessascheck
+    email: klessascheck@tu-berlin.de
+    affiliation: Technische Universitaet Berlin
+    orcid: 'https://orcid.org/0000-0001-6961-1828'
+identifiers:
+  - type: doi
+    value: 10.13140/RG.2.2.16323.27688
+    description: Master's Thesis first describing this software
+repository-code: 'https://github.com/fyndalf/sustainability-analysis-tool'
+keywords:
+  - process simulation
+  - business process management
+  - environmental sustainability
+  - life cycle assessment
+license: MIT
+commit: 6d3ffdc
+version: v0.1.1
+date-released: '2022-07-08'
