@@ -29,17 +29,28 @@ object Log:
         var activityProfilesOfTrace = Seq[ActivityProfile]()
 
         // get cost variant attribute
-        val costVariantIdentifier = traceNode.child
-          .find(traceAttribute =>
-            traceAttribute.attribute("key").isDefined && traceAttribute
-              .attribute("key")
-              .get
-              .text == "cost:variant"
-          )
-          .get
-          .attribute("value")
-          .get
-          .text
+
+        var costVariantIdentifier = ""
+
+        try
+          costVariantIdentifier = traceNode.child
+            .find(traceAttribute =>
+              traceAttribute.attribute("key").isDefined && traceAttribute
+                .attribute("key")
+                .get
+                .text == "cost:variant"
+            )
+            .get
+            .attribute("value")
+            .get
+            .text
+
+        catch
+          case e: NoSuchElementException =>
+            e.printStackTrace()
+            throw new NoSuchFieldException(
+              "Cost Variant information missing in trace"
+            )
 
         // get cost variant from attribute
         val costVariantOfTrace: CostVariant =
