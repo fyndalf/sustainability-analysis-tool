@@ -34,7 +34,7 @@ object Main
         val processModelPath = Opts
           .option[Path](
             long = "process-model",
-            help = "Process Model of the first simulation run"
+            help = "Process Model of the first process execution"
           )
           .orNone
         val secondLogFile = Opts
@@ -93,11 +93,17 @@ object Main
               secondCostPathParam
             )
 
-            println(mode.toString)
-
-            // todo: comment everything
-
-            // todo: compile to executable
+            mode match
+              case _: SingleLog => println("Analyzing a single event log...")
+              case _: SingleLogAndProcessModel =>
+                println(
+                  "Analyzing a single event log and highlighting results in a process model ..."
+                )
+              case _: TwoLogs => println("Analyzing two event logs...")
+              case _: TwoLogsAndProcessModel =>
+                println(
+                  "Analyzing two event logs and highlighting results in a process model ..."
+                )
 
             mode match
               case _: SingleLog => analyseSingleLog(logPathParam, costPathParam)

@@ -2,14 +2,70 @@
 
 [![scalafmt](https://github.com/fyndalf/sustainability-analysis-tool/actions/workflows/scala-lint.yml/badge.svg)](https://github.com/fyndalf/sustainability-analysis-tool/actions/workflows/scala-lint.yml)
 
-Unless you're actually reviewing my thesis, it's probably not worthwhile checking out this code, but I hope you enjoy your stay here anyways!
 
 ## Overview
 
-This is a CLI tool meant to be used in conjunction with the framework outlined in my [Master's thesis](https://github.com/fyndalf/master-thesis).
-It is meant to analyse cost-driver enriched event logs, analyse them, and enhance related process models.
-Also, comparison between logs before and after process-redesign is supported. 
+This is a CLI tool meant to be used in conjunction with the framework outlined in my [Master's thesis](http://dx.doi.org/10.13140/RG.2.2.16323.27688).
+It is meant to analyse cost-driver enriched event logs, analyse them, and enhance related process models in order to assess and reduce their environmental impact.
+Also, a visualized comparison between logs before and after process-redesign is supported.
 
+## Application
+
+### Simulation with Scylla
+
+⚠️ important points below ⚠️
+- Either at least one event log needs to have been generated using a fork of the business process simulation engine [Scylla](https://github.com/fyndalf/scylla/tree/thesis-implementation), or it must have been extracted from an POIS. In both cases, the format will need to follow the .XES standard and provide attditional information:
+
+```xml
+<trace>
+    	<string key="concept:name" value="trace_id"/>
+    	<string key="cost:variant" value="one variant to be assessed"/>
+    	...
+    	<event>
+    		<string key="concept:name" value="activity name"/>
+    		<string key="lifecycle:transition" value="start"/>
+    		<date key="time:timestamp" value="2022-05-30T18:09:24+02:00"/>
+    	</event>
+    	<event>
+    		<string key="cost:driver" value="name of abstract driver that is concretized in cost variant above"/>
+    		<string key="concept:name" value="another activity name"/>
+    		<string key="lifecycle:transition" value="complete"/>
+    		<date key="time:timestamp" value="2022-05-30T18:19:24+02:00"/>
+    	</event>
+    	...
+</trace>
+```
+
+- Additionally, only BPMN diagrams created with [bpmn.io](https://demo.bpmn.io) can be simulated with Scylla, due to internal parsing and namespace issues. Thus, this tool also relies on it.
+- In the model, cost drivers are prefixed by "Cost Driver: ", followed by the name of the abstract cost driver.
+- When modelling abstract cost drivers, make sure to only have *one* data object per abstract cost driver in the model. Further, the associations are directed _from_ cost drivers _to_ activities.
+- Cost config files follow the following XML format, where the names of abstract cost drivers needs to correspond to those of the process model:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<costVariantConfig>
+    <variant id="one variant to be simulated" frequency="between 0 and 1">
+        <driver id="name of abstract cost driver" cost="concrete cost score, e.g. 0.0001"/>
+        ...
+    </variant>
+    <variant id="another variant to be simulated" frequency="between 0 and 1">
+        <driver id="name of abstract cost driver" cost="potentially different concrete cost score, e.g. 0.00099"/>
+        ...
+    </variant>
+    ...
+</costVariantConfig>
+```
+
+### Analysis with this Tool
+
+Using this tool and event logs either simulated or extracted, the following analyses can be made:
+- what are the average environmental impacts of a process recorded by an event log?
+  - the impacts of individual activities can be highlighted in comparison to the average impact per activity in a process model
+- what are the differences in average environmental impacts between two event logs (i.e., for example between before and after process re-design)?
+  - the differences can be expressed both in absolute and in relative terms
+  - the differences can additionally be highlighted in a process model, indicating improvement or deterioration
+
+Based on this, new iterations with potentially new cost variant configs and simulations runs can be conducted.
 
 ## Usage and Installation
 
@@ -24,7 +80,7 @@ Options and flags:
     --help
         Display this help text.
     --process-model <path>
-        Process Model of the first simulation run
+        Process Model of the first process execution
     --second-log <path>
         Second log file after re-design
     --second-config <path>
