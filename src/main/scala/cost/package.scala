@@ -95,6 +95,7 @@ package object cost:
   ): Double =
     // todo: how to handle NaN or Infinity scenarios here?
     if costBefore == costAfter then return 0.0
+    if costBefore.isNaN || costAfter.isNaN then return Double.NaN
     BigDecimal(((costAfter - costBefore) / costBefore) * 100)
       .setScale(2, BigDecimal.RoundingMode.DOWN)
       .toDouble
