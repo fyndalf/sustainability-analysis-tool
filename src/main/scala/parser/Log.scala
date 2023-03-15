@@ -100,13 +100,17 @@ object Log:
                     .find(_.name == costDriverIdentifier)
                     .get
             )
-            // store activity profile for trace
-            activityProfilesOfTrace =
-              activityProfilesOfTrace :+ ActivityProfile(
-                currentActivity,
-                concreteCostDriversOfActivity.toList,
-                fixedCost
-              );
+
+            // only store activities that contribute costs
+            if fixedCost != 0.0 || concreteCostDriversOfActivity.nonEmpty
+            then
+              // store activity profile for trace
+              activityProfilesOfTrace =
+                activityProfilesOfTrace :+ ActivityProfile(
+                  currentActivity,
+                  concreteCostDriversOfActivity.toList,
+                  fixedCost
+                );
         )
         // create trace profile for trace and its extracted activity profiles
         traceProfiles =

@@ -14,7 +14,7 @@ Also, a visualized comparison between logs before and after process-redesign is 
 ### Simulation with Scylla
 
 ⚠️ important points below ⚠️
-- Either at least one event log needs to have been generated using a fork of the business process simulation engine [Scylla](https://github.com/fyndalf/scylla/tree/thesis-implementation), or it must have been extracted from an POIS. In both cases, the format will need to follow the .XES standard and provide attditional information:
+- Either at least one event log needs to have been generated using a fork of the business process simulation engine [Scylla](https://github.com/fyndalf/scylla/tree/thesis-implementation), or it must have been extracted from an POIS. In both cases, the format will need to follow the .XES standard and provide additional information:
 
 ```xml
 <trace>
@@ -43,7 +43,7 @@ Also, a visualized comparison between logs before and after process-redesign is 
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<costVariantConfig>
+<costVariantConfig count="count of instances to be simulated with scylla">
     <variant id="one variant to be simulated" frequency="between 0 and 1">
         <driver id="name of abstract cost driver" cost="concrete cost score, e.g. 0.0001"/>
         ...
